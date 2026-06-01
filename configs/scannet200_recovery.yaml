@@ -1,0 +1,43 @@
+foundation_model:
+  sam2_checkpoint: './weighs/sam2_hiera_large.pt'
+  clip_checkpoint: './weighs/ViT-L-14-336px.pt'
+
+segmenter2d:
+  model: 'SAM-2'
+  clip_model: 'ViT-L/14@336px'
+
+proposal3d:
+  ncluster_fps: 512
+  video_factor: 100
+  sppweight: 0.5
+  weighted_views: 10
+  view_optim: 10
+  neighbors: 32
+
+data:
+  dataset_name: 'scannet200'
+  split_path: './loader3d/scannetv2_val.txt'  # change to your scene list
+  datapath: './data/Scannet200/Scannet200_2D_5interval/val'
+  gt_pth: './data/Scannet200/Scannet200_3D/val/groundtruth'
+  original_ply: './data/Scannet200/Scannet200_3D/val/original_ply_files'
+  spp_path: './data/Scannet200/Scannet200_3D/val/superpoints'
+  cls_agnostic_3d_proposals_path: './data/Scannet200/Scannet200_3D/val/isbnet_clsagnostic_scannet200'
+  dc_features_path: './data/Scannet200/Scannet200_3D/val/dc_feat_scannet200'
+
+  img_dim: [640, 480]
+  rgb_img_dim: [1296, 968]
+  cut_num_pixel_boundary: 10
+  img_interval: 2
+  num_classes: 198
+
+exp:
+  exp_name: "version_old_random_dc_features"
+  mask2d_output: 'mask_sam'
+  clustering_3d_output: 'mask2d_lifted_recovery'
+  clip_feature: 'refined_grounded_feat_Scannet200'
+  openvocab_output: 'openvocab_results'
+  save_dir: './outputs'
+  llm_feature: 'llm_feature'
+  freevocab_output: 'freevocab_results'
+
+fp16: True
