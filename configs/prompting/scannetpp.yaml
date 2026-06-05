@@ -1,6 +1,6 @@
 foundation_model:
   # Segment Anything Model - 2
-  sam2_checkpoint: './weighs/sam2_hiera_large.pt'
+  sam2_checkpoint: './freevocab_checkpoints/sam2_hiera_large.pt'
 
 
 ### Current supported segmenter2ds
@@ -37,6 +37,6 @@ exp:
   mask2d_output: 'mask_sam' # For open3dis_reproduce
   clustering_3d_output: 'mask2d_lifted' # 2Dlift path
   final_output: 'final_results' 
-  save_dir: './outputs'
+  save_dir: '../exp_scannetpp_promptsam2'
 
 fp16: True

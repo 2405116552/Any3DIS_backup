@@ -386,7 +386,7 @@ class FreeVocab_Reproduce:
         self.model.class_generator.base_model = self.model.class_generator.base_model.cpu()
         torch.cuda.empty_cache()
 
-        feat_bank = torch.zeros((self.points.shape[0], 32, 768), dtype=torch.float16).cuda() # QFormer Channel
+        feat_bank = torch.zeros((self.points.shape[0], 32, 768), dtype=torch.float16).cpu() # QFormer Channel  - keep on CPU to avoid OOM on large scenes
         counter = torch.ones((self.points.shape[0], 32, 768)).cpu()
         check = torch.zeros((self.points.shape[0], 32, 768)).cpu()
         cnt = 0
@@ -407,9 +407,9 @@ class FreeVocab_Reproduce:
             end_tok =  32
             while start_tok < end_tok:
                 start_tokk = min(start_tok + 1, end_tok)
-                final_feat = torch.einsum("qcd,qhw->cdhw", torch.stack(embeddings[start_frame:end_frame])[:, start_tok: start_tokk].to(torch.float16).cuda(), pred_masks.to(torch.float16).cuda())
+                final_feat_gpu = torch.einsum("qcd,qhw->cdhw", torch.stack(embeddings[start_frame:end_frame])[:, start_tok: start_tokk].to(torch.float16).cuda(), pred_masks.to(torch.float16).cuda())
                 if start_tok == 0:
-                    jdx = torch.where(final_feat[0, 0, mapping[idx, 1], mapping[idx, 2]]!=0)[0].cpu()
+                    jdx = torch.where(final_feat_gpu[0, 0, mapping[idx, 1], mapping[idx, 2]]!=0)[0].cpu()
                     counter[idx[jdx]] += 1
                     check[idx[jdx]] = 1
                     del jdx
@@ -418,17 +418,17 @@ class FreeVocab_Reproduce:
                 endb = 768
                 while startb < endb:
                     startbb = min(startb + 10, endb)
-                    feat_bank[idx, start_tok : start_tokk,startb:startbb] += final_feat[:, startb : startbb, mapping[idx, 1], mapping[idx, 2]].cuda().permute(2,0,1)
+                    slice_val = final_feat_gpu[:, startb : startbb, mapping[idx, 1], mapping[idx, 2]].cpu().permute(2,0,1)
+                    feat_bank[idx, start_tok : start_tokk,startb:startbb] += slice_val
                     torch.cuda.empty_cache()
                     startb = startbb
                 start_tok = start_tokk
-                del final_feat
+                del final_feat_gpu
 
             cnt += 1
 
         counter = counter - check # avoid divided by 0
-        feat_bank = feat_bank.cpu() 
-        counter = counter.cpu() 
+        # feat_bank already on CPU
         feat_bank/=counter
         # torch.save({'feat':feat_bank}, llm_feature_path)  # skip huge cache save to save disk space
         torch.cuda.empty_cache()
@@ -460,7 +460,7 @@ class FreeVocab_Reproduce:
 
         self.spp = spp
         self.n_spp = n_spp
-        self.loader_2d_dict(pointcloud_mapper, loader)
+        self.loader_2d_dict(pointcloud_mapper, loader, interval=cfg.data.img_interval)
         
 
         save_dir_cluster = os.path.join(cfg.exp.save_dir, cfg.exp.exp_name, cfg.exp.clustering_3d_output, scene_id + '.pth')        
@@ -502,7 +502,7 @@ class FreeVocab_Reproduce:
         categories = []
 
         if len(self.class_names) < 100: # scannetpp
-            sub_path = f"/root/3dllm/sub/{scene_id}.pth"
+            sub_path = os.path.join(cfg.data.gt_pth.replace('groundtruth', 'sub'), f"{scene_id}.pth")
             sub_idx = torch.load(sub_path)["sub"]
             sub_inst3D = self.instance3d[:,sub_idx]
             instance3d = sub_inst3D >= 0.5        

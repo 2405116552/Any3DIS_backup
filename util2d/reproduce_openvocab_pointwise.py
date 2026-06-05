@@ -294,7 +294,7 @@ class OpenVocab_Reproduce_PointWise:
 
         self.spp = spp
         self.n_spp = n_spp
-        self.loader_2d_dict(pointcloud_mapper, loader)
+        self.loader_2d_dict(pointcloud_mapper, loader, interval=cfg.data.img_interval)
         
         #NOTE: 2D preparation
         save_dir_2d = os.path.join(cfg.exp.save_dir, cfg.exp.exp_name, cfg.exp.mask2d_output, scene_id)

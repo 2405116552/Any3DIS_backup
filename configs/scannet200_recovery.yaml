@@ -1,6 +1,6 @@
 foundation_model:
-  sam2_checkpoint: './weighs/sam2_hiera_large.pt'
-  clip_checkpoint: './weighs/ViT-L-14-336px.pt'
+  sam2_checkpoint: './freevocab_checkpoints/sam2_hiera_large.pt'
+  clip_checkpoint: './freevocab_checkpoints/ViT-L-14-336px.pt'
 
 segmenter2d:
   model: 'SAM-2'
@@ -16,7 +16,7 @@ proposal3d:
 
 data:
   dataset_name: 'scannet200'
-  split_path: './loader3d/scannetv2_val.txt'  # change to your scene list
+  split_path: './loader3d/scannetv2_val_missing_mask_sam.txt'
   datapath: './data/Scannet200/Scannet200_2D_5interval/val'
   gt_pth: './data/Scannet200/Scannet200_3D/val/groundtruth'
   original_ply: './data/Scannet200/Scannet200_3D/val/original_ply_files'

@@ -18,7 +18,8 @@ from tqdm import tqdm, trange
 from sam2.build_sam import build_sam2_video_predictor, build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 # from segment_anything import SamPredictor, build_sam, build_sam_hq
-from segment_anything_hq import sam_model_registry, SamPredictor
+# SAM-HQ not installed; import commented out (not used in current pipeline)
+# from segment_anything_hq import sam_model_registry, SamPredictor
 
 from loader3d import build_dataset
 from loader3d.scannet_loader import scaling_mapping
@@ -45,7 +46,8 @@ from scipy.spatial import KDTree
 
 import random
 
-from numba import cuda
+# numba cuda import is unused, removed for numpy 2.x compatibility
+# from numba import cuda
 import concurrent.futures
 import multiprocessing as mp
 

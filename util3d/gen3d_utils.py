@@ -7,7 +7,16 @@ from collections import deque
 from typing import Dict, Union
 import numpy as np
 import pycocotools.mask
-from numba import njit
+try:
+    from numba import njit
+except ImportError:
+    # Fallback: no-op decorator if numba is unavailable
+    def njit(*args, **kwargs):
+        def decorator(func):
+            return func
+        if len(args) == 1 and callable(args[0]):
+            return args[0]
+        return decorator
 
 def custom_scatter_mean(input_feats, indices, dim=0, pool=True, output_type=None):
     if not pool:

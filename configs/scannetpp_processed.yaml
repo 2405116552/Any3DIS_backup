@@ -5,8 +5,8 @@ foundation_model:
 
 
 ### Current supported segmenter2ds
-# ['SAM-2': Segment-Anything-Model v2 || 
-# 'Open3DIS_SAM-2': Open3DIS with Automatic SAM v2 
+# ['SAM-2': Segment-Anything-Model v2 ||
+# 'Open3DIS_SAM-2': Open3DIS with Automatic SAM v2
 # 'SAM-2-Point': Segment-Anything-Model v2 on point granularity point prompt SAM]
 ###
 segmenter2d:
@@ -22,21 +22,21 @@ proposal3d:
 data:
   dataset_name: 'scannetpp'
   split_path: './loader3d/scannetpp_val.txt'
-  datapath: './data/Scannetpp/Scannetpp_2D_5interval/val' # RGB-D + pose path
-  gt_pth: './data/Scannetpp/Scannetpp_3D/val/groundtruth' # gt path
-  original_ply: './data/Scannetpp/Scannetpp_3D/val/original_ply_files' # raw pcl
-  spp_path: './data/Scannetpp/Scannetpp_3D/val/superpoints' # spp path
-  cls_agnostic_3d_proposals_path: './data/Scannetpp/Scannetpp_3D/val/isbnet_clsagnostic_scannetpp' # cls agnostic 3D proposals
-  dc_features_path: './data/Scannetpp/Scannetpp_3D/val/dc_feat_scannetpp' # spp feature path
+  datapath: './data/scannetpp_processed/Scannetpp_2D_5interval/val' # RGB-D + pose path
+  gt_pth: './data/scannetpp_processed/Scannetpp_3D/val/groundtruth' # gt path
+  original_ply: './data/scannetpp_processed/Scannetpp_3D/val/original_ply_files' # raw pcl
+  spp_path: './data/scannetpp_processed/Scannetpp_3D/val/superpoints' # spp path
+  cls_agnostic_3d_proposals_path: './data/scannetpp_processed/Scannetpp_3D/val/isbnet_clsagnostic_scannetpp' # cls agnostic 3D proposals
+  dc_features_path: './data/scannetpp_processed/Scannetpp_3D/val/dc_feat_scannetpp' # spp feature path
 
-  img_dim: [1920, 1440] # coord alignment
+  img_dim: [1920, 1440] # coord alignment (matches COLMAP camera resolution)
   rgb_img_dim: [1920, 1440]
   cut_num_pixel_boundary: 10
-  img_interval: 1
+  img_interval: 1  # Data is already subsampled at 10-frame intervals
   num_classes: 1554 # 1554 instance classes, 1659 semantic classes
 
 exp:
-  exp_name: "version_dp_256_fast"
+  exp_name: "version_scannetpp_proc"
   mask2d_output: 'mask_sam' # For open3dis_reproduce
   clustering_3d_output: 'mask2d_lifted' # 2Dlift path
   clip_feature: 'clip_feature' #  CLIP feature

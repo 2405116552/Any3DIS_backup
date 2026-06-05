@@ -75,25 +75,18 @@ def class_similarity(nouns_listA, nouns_listB):
     return score
 
 if __name__=='__main__':
-    import argparse
-    parser = argparse.ArgumentParser(description="FreeVocab Evaluation")
-    parser.add_argument("--data_path", type=str, default="./outputs/version_dp_maximum_score_0.6_n_spp_div4/freevocab_results",
-                        help="Path to freevocab results directory")
-    parser.add_argument("--dataset", type=str, default="scannet200", choices=["scannet200", "scannetpp"],
-                        help="Dataset name")
-    parser.add_argument("--pcl_path", type=str, default="./data/Scannet200/Scannet200_3D/val/groundtruth",
-                        help="Path to groundtruth data")
-    args = parser.parse_args()
 
-    data_path = args.data_path
-    dataset = args.dataset
-    pcl_path = args.pcl_path
+
+    data_path = "./outputs/version_dp_maximum_score_0.6_n_spp_div4/freevocab_results"
+    dataset = "scannet200"
 
     if dataset == "scannet200":
         scan_eval = ScanNetEval(class_labels = INSTANCE_CAT_SCANNET_200)
+        pcl_path = './data/Scannet200/Scannet200_3D/val/groundtruth'
     elif dataset == "scannetpp":
         scan_eval = ScanNetEval(class_labels = INSTANCE_BENCHMARK84_SCANNET_PP, dataset_name="scannetpp_benchmark_instance")
-        sub_path = "./data/Scannetpp/Scannetpp_3D/val/sub"
+        pcl_path = '../../groundtruth_benchmark_instance'
+        sub_path = "../../sub"
 
 
     scenes = sorted([s for s in os.listdir(data_path) if s.endswith('.pth')])

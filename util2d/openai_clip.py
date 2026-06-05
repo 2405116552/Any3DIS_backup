@@ -8,7 +8,7 @@ class CLIP_OpenAI:
         # breakpoint()
         # 
         # self.clip_adapter, self.clip_preprocess = clip.load(cfg.segmenter2d.clip_model, device = 'cuda')
-        self.clip_adapter, self.clip_preprocess = clip.load(cfg.foundation_model.clip_checkpoint, device = 'cuda')
+        self.clip_adapter, self.clip_preprocess = clip.load("./weighs/ViT-L-14-336px.pt", device = 'cuda')
         
         self.dim = 768
         print('------- Loaded CLIP ViT-L/14 336px OpenAI -------')

@@ -1,7 +1,7 @@
 foundation_model:
   # Segment Anything Model - 2
-  sam2_checkpoint: './weighs/sam2_hiera_large.pt'
-  clip_checkpoint: './weighs/ViT-L-14-336px.pt'
+  sam2_checkpoint: './freevocab_checkpoints/sam2_hiera_large.pt'
+  clip_checkpoint: './freevocab_checkpoints/ViT-L-14-336px.pt'
 
 
 ### Current supported segmenter2ds
@@ -36,7 +36,7 @@ exp:
   clustering_3d_output: 'mask2d_lifted' # 2Dlift path
   clip_feature: 'clip_feature' #  CLIP feature
   openvocab_output: 'openvocab_results'  # benchmarking openvocab results
-  save_dir: './outputs'
+  save_dir: '../freevocab_exp_scannetpp'
   llm_feature: 'llm_feature' # SPP Wise CLIP feature
   freevocab_output: 'freevocab_results'  # benchmarking openvocab results
 fp16: True

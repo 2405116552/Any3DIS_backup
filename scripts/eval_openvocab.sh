@@ -4,7 +4,7 @@ export PYTHONWARNINGS="ignore"
 PYTHONPATH=./:$PYTHONPATH
 
 export PYTHONPATH
-CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} python3 evaluation/eval_openvocab.py
+CUDA_VISIBLE_DEVICES=0 /home/chenhui.yang/.local/share/conda/envs/any3dis/bin/python3 evaluation/eval_openvocab.py
     
 #laion2b_s39b_b160k
 

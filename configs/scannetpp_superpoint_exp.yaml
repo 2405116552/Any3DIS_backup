@@ -1,0 +1,42 @@
+# Superpoint size experiment: voxel=0.10 (was 0.05)
+foundation_model:
+  sam2_checkpoint: './freevocab_checkpoints/sam2_hiera_large.pt'
+  clip_checkpoint: './freevocab_checkpoints/ViT-L-14-336px.pt'
+
+segmenter2d:
+  model: 'SAM-2'
+  clip_model: 'ViT-L/14@336px'
+
+proposal3d:
+  ncluster_fps: 256
+  sppweight: 0.5
+  weighted_views: 10
+  view_optim: 10
+  neighbors: 32
+
+data:
+  dataset_name: 'scannetpp'
+  split_path: './loader3d/scannetpp_val.txt'
+  datapath: './data/scannetpp_processed/Scannetpp_2D_5interval/val'
+  gt_pth: './data/scannetpp_processed/Scannetpp_3D/val/groundtruth'
+  original_ply: './data/scannetpp_processed/Scannetpp_3D/val/original_ply_files'
+  spp_path: './data/scannetpp_processed/Scannetpp_3D/val/superpoints_v010'  # <-- larger SP
+  cls_agnostic_3d_proposals_path: './data/scannetpp_processed/Scannetpp_3D/val/isbnet_clsagnostic_scannetpp'
+  dc_features_path: './data/scannetpp_processed/Scannetpp_3D/val/dc_feat_scannetpp'
+  img_dim: [1920, 1440]
+  rgb_img_dim: [1920, 1440]
+  cut_num_pixel_boundary: 10
+  img_interval: 1
+  num_classes: 1554
+
+exp:
+  exp_name: "superpoint_exp_v010"
+  mask2d_output: 'mask_sam'
+  clustering_3d_output: 'mask2d_lifted'
+  clip_feature: 'clip_feature'
+  openvocab_output: 'openvocab_results'
+  save_dir: './outputs'
+  llm_feature: 'llm_feature'
+  freevocab_output: 'freevocab_results'
+
+fp16: True

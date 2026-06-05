@@ -11,7 +11,7 @@ import open3d as o3d
 from pathlib import Path
 from tqdm import tqdm
 
-BASE_DIR = Path(".")  # current working directory (project root)
+BASE_DIR = Path("/mnt/cpfs02/home/chenhui.yang/Any3DIS_unofficial")
 PC_ZIP = BASE_DIR / "ScanNet_dataset" / "scannet_pc.zip"
 VAL_SPLIT = BASE_DIR / "loader3d" / "scannetv2_val.txt"
 PLY_DIR = BASE_DIR / "data" / "Scannet200" / "Scannet200_3D" / "val" / "original_ply_files"

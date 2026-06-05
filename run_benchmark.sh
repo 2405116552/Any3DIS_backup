@@ -8,8 +8,8 @@ set -e
 export PYTHONWARNINGS="ignore"
 export PYTHONPATH=./segmenter2d/segment-anything-2:./util2d:$PYTHONPATH
 
-# Use GPU 0 by default, override with GPU_ID env var
-GPU_ID=${GPU_ID:-0}
+# Use GPU 5 (mostly free)
+GPU_ID=${GPU_ID:-5}
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 CONFIG=${1:-configs/scannet200.yaml}
@@ -71,23 +71,25 @@ cleanup() {
 }
 trap cleanup EXIT
 
+PYTHON_BIN=/home/chenhui.yang/.local/share/conda/envs/any3dis/bin/python3
+
 # ============================================================
 # Step 1: Class-agnostic 3D instance segmentation
 # ============================================================
 run_step "01_mask_generator" \
-    "python3 tools/mask_generator.py --config $CONFIG" || exit 1
+    "$PYTHON_BIN tools/mask_generator.py --config $CONFIG" || exit 1
 
 # ============================================================
 # Step 2: Open-vocabulary classification
 # ============================================================
 run_step "02_mask_openvocab" \
-    "python3 tools/mask_openvocab.py --config $CONFIG" || exit 1
+    "$PYTHON_BIN tools/mask_openvocab.py --config $CONFIG" || exit 1
 
 # ============================================================
 # Step 3: Free-form vocabulary
 # ============================================================
 run_step "03_mask_freevocab" \
-    "python3 tools/mask_freevocab.py --config $CONFIG" || exit 1
+    "$PYTHON_BIN tools/mask_freevocab.py --config $CONFIG" || exit 1
 
 # ============================================================
 # Evaluation
@@ -97,15 +99,15 @@ echo "=== Running Evaluation ==="
 
 # Class-agnostic evaluation
 run_step "04_eval_classagnostic" \
-    "python3 evaluation/eval_class_agnostic.py --config $CONFIG --type 2D" || true
+    "$PYTHON_BIN evaluation/eval_class_agnostic.py --config $CONFIG" || true
 
 # Open-vocabulary evaluation
 run_step "05_eval_openvocab" \
-    "python3 evaluation/eval_openvocab.py --data_path ./outputs/\$(python3 -c 'import yaml; print(yaml.safe_load(open(\"$CONFIG\"))[\"exp\"][\"exp_name\"])')/openvocab_results" || true
+    "$PYTHON_BIN evaluation/eval_openvocab.py" || true
 
 # Free-vocabulary evaluation
 run_step "06_eval_freevocab" \
-    "python3 evaluation/eval_freevocab.py --data_path ./outputs/\$(python3 -c 'import yaml; print(yaml.safe_load(open(\"$CONFIG\"))[\"exp\"][\"exp_name\"])')/freevocab_results" || true
+    "$PYTHON_BIN evaluation/eval_freevocab.py" || true
 
 echo ""
 echo "=============================================="
